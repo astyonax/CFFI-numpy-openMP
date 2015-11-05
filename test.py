@@ -65,3 +65,4 @@ _test.lib.add_array(
 )
 
 assert numpy.array_equal(a+b, result)
+print('All OK!')
