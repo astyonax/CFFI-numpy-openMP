@@ -1,12 +1,12 @@
 Just run test.py!
 
-On Mac OS X without OpenMP:
+# On Mac OS X without OpenMP:
 
 ```
 python3 test.py
 ```
 
-On Mac OS X with OpenMP:
+# On Mac OS X with OpenMP:
 
 ```
 # --without-multilib is mandatory for building
@@ -15,7 +15,7 @@ brew reinstall gcc --without-multilib
 CC=gcc-5 python3 test.py use_openmp
 ```
 
-On Ubuntu 14.04:
+# On Ubuntu 14.04:
 
 GCC is the default compiler and it supports OpenMP by default
 
