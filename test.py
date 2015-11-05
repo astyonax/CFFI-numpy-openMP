@@ -37,4 +37,4 @@ _test.lib.add_array(
     _test.ffi.cast('double (*)[3]', result.__array_interface__['data'][0]),
 )
 
-assert numpy.array_equal(a+a, result)
+assert numpy.array_equal(a+b, result)
