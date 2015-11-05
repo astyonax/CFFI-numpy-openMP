@@ -1,9 +1,32 @@
+import sys
+use_openmp = False
+try:
+    if sys.argv[1] == 'use_openmp':
+        use_openmp = True
+except IndexError:
+    pass
+
 import cffi
 ffi = cffi.FFI()
+
 with open('test.h') as my_header:
     ffi.cdef(my_header.read())
 with open('test.c') as my_source:
-    ffi.set_source('_test', my_source.read(), extra_compile_args=['-Wall', '-g', '-O0'])
+    if __debug__:
+        ffi.set_source(
+            '_test',
+            my_source.read(),
+            extra_compile_args=['-fopenmp', '-Wall', '-g', '-O0']
+        )
+    else:
+        if use_openmp:
+            ffi.set_source(
+                '_test',
+                my_source.read(),
+                extra_compile_args=['-D use_openmp', '-fopenmp', '-Ofast']
+            )
+        else:
+            ffi.set_source('_test', my_source.read(), extra_compile_args=['-Ofast'])
 
 ffi.compile()  # convert and compile - mandatory!
 
