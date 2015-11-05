@@ -25,7 +25,8 @@ with open('test.c') as my_source:
             ffi.set_source(
                 '_test',
                 my_source.read(),
-                extra_compile_args=['-fopenmp', '-D use_openmp', '-Ofast']
+                extra_compile_args=['-fopenmp', '-D use_openmp', '-Ofast'],
+                extra_link_args=['-fopenmp'],
             )
         else:
             print('Building for performance without OpenMP...')
