@@ -8,7 +8,7 @@ double myadder(double x, double y) {
     return x + y;
 }
 
-void add_array(int x, int y, double (*a)[3], double (*b)[3], double (*result)[3]) {
+void add_array(int x, int y, double (*a)[y], double (*b)[y], double (*result)[y]) {
     // collapse(2) needed to parallelize both loops
     #ifdef use_openmp
         #pragma omp parallel for collapse(2)
