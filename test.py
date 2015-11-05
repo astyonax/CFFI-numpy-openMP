@@ -13,6 +13,7 @@ with open('test.h') as my_header:
     ffi.cdef(my_header.read())
 with open('test.c') as my_source:
     if __debug__:
+        print('Building the debug build...')
         ffi.set_source(
             '_test',
             my_source.read(),
@@ -20,12 +21,14 @@ with open('test.c') as my_source:
         )
     else:
         if use_openmp:
+            print('Building for performance with OpenMP...')
             ffi.set_source(
                 '_test',
                 my_source.read(),
-                extra_compile_args=['-D use_openmp', '-fopenmp', '-Ofast']
+                extra_compile_args=['-fopenmp', '-D use_openmp', '-Ofast']
             )
         else:
+            print('Building for performance without OpenMP...')
             ffi.set_source('_test', my_source.read(), extra_compile_args=['-Ofast'])
 
 ffi.compile()  # convert and compile - mandatory!
