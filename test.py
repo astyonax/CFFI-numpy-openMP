@@ -53,8 +53,8 @@ b = numpy.array(
 result = numpy.zeros_like(a)
 
 _test.lib.add_array(
-    _test.ffi.cast('int', 3),
-    _test.ffi.cast('int', 3),
+    _test.ffi.cast('int', a.shape[0]),
+    _test.ffi.cast('int', a.shape[1]),
     _test.ffi.cast('double (*)[3]', a.__array_interface__['data'][0]),
     _test.ffi.cast('double (*)[3]', b.__array_interface__['data'][0]),
     _test.ffi.cast('double (*)[3]', result.__array_interface__['data'][0]),

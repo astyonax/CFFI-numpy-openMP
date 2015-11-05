@@ -17,4 +17,8 @@ CC=gcc-5 python3 test.py use_openmp
 
 On Ubuntu 14.04:
 
+GCC is the default compiler and it supports OpenMP by default
+
+```
 python3 test.py use_openmp
+```
