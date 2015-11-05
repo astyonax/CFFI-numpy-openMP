@@ -64,9 +64,9 @@ assert (_test.lib.myadder(10,12)) - (10+12) < 0.01  # A - B < 0.1 if A ~= B
 _test.lib.add_array(
     _test.ffi.cast('int', num_rows),
     _test.ffi.cast('int', num_cols),
-    _test.ffi.cast('double (*)[3]', a.__array_interface__['data'][0]),
-    _test.ffi.cast('double (*)[3]', b.__array_interface__['data'][0]),
-    _test.ffi.cast('double (*)[3]', result.__array_interface__['data'][0]),
+    _test.ffi.cast('double (*)[{}]'.format(num_cols), a.__array_interface__['data'][0]),
+    _test.ffi.cast('double (*)[{}]'.format(num_cols), b.__array_interface__['data'][0]),
+    _test.ffi.cast('double (*)[{}]'.format(num_cols), result.__array_interface__['data'][0]),
 )
 
 assert numpy.array_equal(a+b, result)
