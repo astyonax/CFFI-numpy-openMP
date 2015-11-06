@@ -35,7 +35,7 @@ import cffi
 ffi = cffi.FFI()
 
 with open('test.h') as my_header:
-    ffi.cdef(my_header.read().replace('NUM_COLS', str(num_cols)))  # IMPORTANT! cffi limitation
+    ffi.cdef(my_header.read())
 
 with open('test.c') as my_source:
     if __debug__:
@@ -43,7 +43,7 @@ with open('test.c') as my_source:
         ffi.set_source(
             '_test',
             my_source.read(),
-            extra_compile_args=['-fopenmp', '-Wall', '-g', '-O0']
+            extra_compile_args=['-Werror', '-pedantic', '-Wall', '-g', '-O0']
         )
     else:
         if use_openmp:
@@ -69,9 +69,13 @@ assert (_test.lib.myadder(10,12)) - (10+12) < 0.01  # A - B < 0.1 if A ~= B
 
 _x = _test.ffi.cast('int', num_rows)
 _y = _test.ffi.cast('int', num_cols)
-_a = _test.ffi.cast('double (*)[{}]'.format(num_cols), _test.ffi.from_buffer(a))
-_b = _test.ffi.cast('double (*)[{}]'.format(num_cols), _test.ffi.from_buffer(b))
-_result = _test.ffi.cast('double (*)[{}]'.format(num_cols), _test.ffi.from_buffer(result))
+_a = _test.ffi.cast('double *', _test.ffi.from_buffer(a))
+_b = _test.ffi.cast('double *', _test.ffi.from_buffer(b))
+_result = _test.ffi.cast('double *', _test.ffi.from_buffer(result))
+
+_test.lib.add_array(_x, _y, _a, _b, _result)
+assert numpy.array_equal(numpy.add(a,b), result)
+print('All OK!')
 
 import time
 start = time.clock()
@@ -86,5 +90,3 @@ for i in range(10000000):
 end = time.clock()
 print('numpy time -> ' + str(abs(start-end)))
 
-assert numpy.array_equal(numpy.add(a,b), result)
-print('All OK!')
