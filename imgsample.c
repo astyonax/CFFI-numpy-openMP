@@ -1,6 +1,6 @@
 #include "stdlib.h" // import size_t
 
-void sample(size_t row_count, size_t column_count, size_t window_size, float *input, float *output) {
+void sample2d(size_t row_count, size_t column_count, size_t window_size, float *input, float *output) {
     printf("row count-> %zu \n", row_count);
     printf("col count -> %zu \n", column_count);
     printf("window size -> %zu \n", window_size);
