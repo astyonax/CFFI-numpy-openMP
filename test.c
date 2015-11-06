@@ -11,7 +11,7 @@ double myadder(double x, double y) {
 void add_array(int x, int y, double (*a)[y], double (*b)[y], double (*result)[y]) {
     // collapse(2) needed to parallelize both loops
     #ifdef use_openmp
-        #pragma omp parallel for collapse(2)
+        #pragma omp parallel for
     #endif
     for(int i = 0; i < x; i++) {
         for(int j = 0; j < y; j++) {

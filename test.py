@@ -73,7 +73,18 @@ _a = _test.ffi.cast('double (*)[{}]'.format(num_cols), _test.ffi.from_buffer(a))
 _b = _test.ffi.cast('double (*)[{}]'.format(num_cols), _test.ffi.from_buffer(b))
 _result = _test.ffi.cast('double (*)[{}]'.format(num_cols), _test.ffi.from_buffer(result))
 
-_test.lib.add_array(_x, _y, _a, _b, _result)
+import time
+start = time.clock()
+for i in range(10000000):
+    _test.lib.add_array(_x, _y, _a, _b, _result)
+end = time.clock()
+print('C function time -> ' + str(abs(start-end)))
+
+start = time.clock()
+for i in range(10000000):
+    temp = a+b
+end = time.clock()
+print('numpy time -> ' + str(abs(start-end)))
 
 assert numpy.array_equal(numpy.add(a,b), result)
 print('All OK!')
