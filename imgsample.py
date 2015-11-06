@@ -1,3 +1,4 @@
+import sys
 import numpy
 import cffi
 ffi = cffi.FFI()
@@ -37,7 +38,8 @@ my_input = numpy.array(
 )
 
 window_size = 2
-sample_count = (my_input.shape[0]-1) * (my_input.shape[1]-1)
+sample_count = (my_input.shape[0] - window_size + 1) * (my_input.shape[1] - window_size + 1)
+print('window_size -> ' + str(window_size) + ' ... sample_count -> ' + str(sample_count))
 my_output = numpy.zeros((sample_count, window_size, window_size), dtype=numpy.float32)
 
 _x = _imgsample.ffi.cast('size_t', my_input.shape[0])
@@ -63,7 +65,8 @@ my_input = numpy.array(
 )
 
 window_size = 3
-sample_count = (my_input.shape[0]-1) * (my_input.shape[1]-1)
+sample_count = (my_input.shape[0] - window_size + 1) * (my_input.shape[1] - window_size + 1)
+print('window_size -> ' + str(window_size) + ' ... sample_count -> ' + str(sample_count))
 my_output = numpy.zeros((sample_count, window_size, window_size), dtype=numpy.float32)
 
 _x = _imgsample.ffi.cast('size_t', my_input.shape[0])
@@ -73,6 +76,25 @@ _my_input = _imgsample.ffi.cast('float *', _imgsample.ffi.from_buffer(my_input))
 _my_output = _imgsample.ffi.cast('float *', _imgsample.ffi.from_buffer(my_output))
 
 _imgsample.lib.sample(_x, _y, _window_size, _my_input, _my_output)
-print('testing with window size -> 3')
+assert numpy.array_equal(my_output[0], [[1,2,3],[5,6,7],[9,10,11]])
+assert numpy.array_equal(my_output[sample_count-1], [[6,7,8],[10,11,12],[14,15,16]])
+
+# window size 10
+# big array
+
+my_input = numpy.random.rand(4000,4000).astype(numpy.float32)
+window_size = 10
+
+sample_count = (my_input.shape[0] - window_size + 1) * (my_input.shape[1] - window_size + 1)
+print('window_size -> ' + str(window_size) + ' ... sample_count -> ' + str(sample_count))
+my_output = numpy.zeros((sample_count, window_size, window_size), dtype=numpy.float32)
+
+_x = _imgsample.ffi.cast('size_t', my_input.shape[0])
+_y = _imgsample.ffi.cast('size_t', my_input.shape[1])
+_window_size = _imgsample.ffi.cast('size_t', window_size)
+_my_input = _imgsample.ffi.cast('float *', _imgsample.ffi.from_buffer(my_input))
+_my_output = _imgsample.ffi.cast('float *', _imgsample.ffi.from_buffer(my_output))
+
+_imgsample.lib.sample(_x, _y, _window_size, _my_input, _my_output)
 assert numpy.array_equal(my_output[0], [[1,2,3],[5,6,7],[9,10,11]])
 assert numpy.array_equal(my_output[sample_count-1], [[6,7,8],[10,11,12],[14,15,16]])
