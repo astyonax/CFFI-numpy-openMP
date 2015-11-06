@@ -64,8 +64,8 @@ assert (_test.lib.myadder(10,12)) - (10+12) < 0.01  # A - B < 0.1 if A ~= B
 # _test.ffi.from_buffer(my_array) is a less verbose alternative to:
 # my_array.__array_interface__['data'][0]
 
-_x = _test.ffi.cast('int', a.shape[0])
-_y = _test.ffi.cast('int', a.shape[1])
+_x = _test.ffi.cast('size_t', a.shape[0])
+_y = _test.ffi.cast('size_t', a.shape[1])
 _a = _test.ffi.cast('double *', _test.ffi.from_buffer(a))
 _b = _test.ffi.cast('double *', _test.ffi.from_buffer(b))
 _result = _test.ffi.cast('double *', _test.ffi.from_buffer(result))
