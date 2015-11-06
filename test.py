@@ -1,17 +1,20 @@
 import numpy
+
 a = numpy.array(
     [
-        [1, 2, 3],
-        [4, 5, 6],
-        [7, 8, 9],
+        [1, 2, 3, 4, 5, 6],
+        [4, 5, 6, 7, 8, 9],
+        [1, 2, 3, 4, 5, 6],
+        [4, 5, 6, 7, 8, 9],
     ], dtype=numpy.float64
 )
 
 b = numpy.array(
     [
-        [1, 2, 3],
-        [4, 5, 6],
-        [7, 8, 9],
+        [4, 5, 6, 7, 8, 9],
+        [1, 2, 3, 4, 5, 6],
+        [6, 5, 4, 3, 1, 2],
+        [1, 2, 3, 4, 5, 6],
     ], dtype=numpy.float64
 )
 
@@ -64,13 +67,13 @@ assert (_test.lib.myadder(10,12)) - (10+12) < 0.01  # A - B < 0.1 if A ~= B
 # _test.ffi.from_buffer(my_array) is a less verbose alternative to:
 # my_array.__array_interface__['data'][0]
 
-_test.lib.add_array(
-    _test.ffi.cast('int', num_rows),
-    _test.ffi.cast('int', num_cols),
-    _test.ffi.cast('double (*)[{}]'.format(num_cols), _test.ffi.from_buffer(a)),
-    _test.ffi.cast('double (*)[{}]'.format(num_cols), _test.ffi.from_buffer(b)),
-    _test.ffi.cast('double (*)[{}]'.format(num_cols), _test.ffi.from_buffer(result)),
-)
+_x = _test.ffi.cast('int', num_rows)
+_y = _test.ffi.cast('int', num_cols)
+_a = _test.ffi.cast('double (*)[{}]'.format(num_cols), _test.ffi.from_buffer(a))
+_b = _test.ffi.cast('double (*)[{}]'.format(num_cols), _test.ffi.from_buffer(b))
+_result = _test.ffi.cast('double (*)[{}]'.format(num_cols), _test.ffi.from_buffer(result))
 
-assert numpy.array_equal(a+b, result)
+_test.lib.add_array(_x, _y, _a, _b, _result)
+
+assert numpy.array_equal(numpy.add(a,b), result)
 print('All OK!')
