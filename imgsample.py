@@ -47,8 +47,32 @@ _my_input = _imgsample.ffi.cast('float *', _imgsample.ffi.from_buffer(my_input))
 _my_output = _imgsample.ffi.cast('float *', _imgsample.ffi.from_buffer(my_output))
 
 _imgsample.lib.sample(_x, _y, _window_size, _my_input, _my_output)
+print('testing with window size -> 2')
 assert numpy.array_equal(my_output[0], [[1,2],[5,6]])
 assert numpy.array_equal(my_output[sample_count-1], [[11,12],[15,16]])
 
 # window size 3
 
+my_input = numpy.array(
+    [
+        [1,   2,  3,  4],
+        [5,   6,  7,  8],
+        [9,  10, 11, 12],
+        [13, 14, 15, 16],
+    ], dtype=numpy.float32
+)
+
+window_size = 3
+sample_count = (my_input.shape[0]-1) * (my_input.shape[1]-1)
+my_output = numpy.zeros((sample_count, window_size, window_size), dtype=numpy.float32)
+
+_x = _imgsample.ffi.cast('size_t', my_input.shape[0])
+_y = _imgsample.ffi.cast('size_t', my_input.shape[1])
+_window_size = _imgsample.ffi.cast('size_t', window_size)
+_my_input = _imgsample.ffi.cast('float *', _imgsample.ffi.from_buffer(my_input))
+_my_output = _imgsample.ffi.cast('float *', _imgsample.ffi.from_buffer(my_output))
+
+_imgsample.lib.sample(_x, _y, _window_size, _my_input, _my_output)
+print('testing with window size -> 3')
+assert numpy.array_equal(my_output[0], [[1,2,3],[5,6,7],[9,10,11]])
+assert numpy.array_equal(my_output[sample_count-1], [[6,7,8],[10,11,12],[14,15,16]])

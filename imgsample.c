@@ -13,6 +13,10 @@ void sample(size_t row_count, size_t column_count, size_t window_size, float *in
                     output_offset = window_size * window_size * output_idx;
                     output_window_offset = (window_size * a + b);
                     output[output_offset + output_window_offset] = input[column_count * (i + a) + (j + b)];
+                    /*
+
+                    // DEBUG
+                    
                     printf("\n"); 
                     printf("input[column_count * (i + a) + (j + b)] -> %2.2f \n", input[column_count * (i + a) + (j + b)]);
                     printf("output offset -> %zu \n", output_offset);
@@ -21,10 +25,13 @@ void sample(size_t row_count, size_t column_count, size_t window_size, float *in
                     printf("a -> %zu \n", a);
                     printf("j -> %zu \n", j);
                     printf("b -> %zu \n", b);
+
+                    */
                 }
             }
             output_idx += 1;
-            printf("output_idx -> %zu \n", output_idx);
+            // DEBUG
+            // printf("output_idx -> %zu \n", output_idx);
         }
     }
 }
