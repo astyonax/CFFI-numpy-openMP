@@ -139,3 +139,22 @@ assert numpy.array_equal(
         [[1,2,6],[3,1,5]],
     ]
 )
+
+# window size 10
+# big RGB array (3D)
+
+my_input = numpy.random.rand(1000,1000,3).astype(numpy.float32)
+window_size = 20
+
+sample_count = 3 * (my_input.shape[0] - window_size + 1) * (my_input.shape[1] - window_size + 1)
+print('window_size -> ' + str(window_size) + ' ... sample_count -> ' + str(sample_count))
+my_output = numpy.zeros((sample_count, window_size, window_size), dtype=numpy.float32)
+
+_x = _imgsample.ffi.cast('size_t', my_input.shape[0])
+_y = _imgsample.ffi.cast('size_t', my_input.shape[1])
+_window_size = _imgsample.ffi.cast('size_t', window_size)
+_my_input = _imgsample.ffi.cast('float *', _imgsample.ffi.from_buffer(my_input))
+_my_output = _imgsample.ffi.cast('float *', _imgsample.ffi.from_buffer(my_output))
+
+_imgsample.lib.sample3d(_x, _y, _window_size, _my_input, _my_output)
+
