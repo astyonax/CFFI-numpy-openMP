@@ -20,9 +20,6 @@ b = numpy.array(
 
 result = numpy.zeros_like(a)
 
-num_rows = a.shape[0]
-num_cols = a.shape[1]
-
 import sys
 use_openmp = False
 try:
@@ -67,26 +64,45 @@ assert (_test.lib.myadder(10,12)) - (10+12) < 0.01  # A - B < 0.1 if A ~= B
 # _test.ffi.from_buffer(my_array) is a less verbose alternative to:
 # my_array.__array_interface__['data'][0]
 
-_x = _test.ffi.cast('int', num_rows)
-_y = _test.ffi.cast('int', num_cols)
+_x = _test.ffi.cast('int', a.shape[0])
+_y = _test.ffi.cast('int', a.shape[1])
 _a = _test.ffi.cast('double *', _test.ffi.from_buffer(a))
 _b = _test.ffi.cast('double *', _test.ffi.from_buffer(b))
 _result = _test.ffi.cast('double *', _test.ffi.from_buffer(result))
 
 _test.lib.add_array(_x, _y, _a, _b, _result)
 assert numpy.array_equal(numpy.add(a,b), result)
-print('All OK!')
+print('Test 1 OK!')
+
+a = numpy.random.rand(10240, 10240).astype(numpy.float64)
+b = numpy.random.rand(10240, 10240).astype(numpy.float64)
+result = numpy.zeros_like(a)
+
+_x = _test.ffi.cast('int', a.shape[0])
+_y = _test.ffi.cast('int', a.shape[1])
+_a = _test.ffi.cast('double *', _test.ffi.from_buffer(a))
+_b = _test.ffi.cast('double *', _test.ffi.from_buffer(b))
+_result = _test.ffi.cast('double *', _test.ffi.from_buffer(result))
+
+_test.lib.add_array(_x, _y, _a, _b, _result)
+assert numpy.array_equal(numpy.add(a,b), result)
+print('Test 2 OK!')
 
 import time
+test_count = 5
 start = time.clock()
-for i in range(10000000):
+for i in range(test_count):
     _test.lib.add_array(_x, _y, _a, _b, _result)
 end = time.clock()
-print('C function time -> ' + str(abs(start-end)))
+time_c = abs(start-end)
+print('C function time -> ' + str(time_c))
 
 start = time.clock()
-for i in range(10000000):
+for i in range(test_count):
     temp = a+b
 end = time.clock()
-print('numpy time -> ' + str(abs(start-end)))
+time_norm = abs(start-end)
+print('numpy time -> ' + str(time_norm))
+
+print('C extension is ' + str(100 * (1 - time_c/time_norm)) + '% faster')
 
