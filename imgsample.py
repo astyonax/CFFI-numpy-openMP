@@ -98,8 +98,6 @@ _my_input = _imgsample.ffi.cast('float *', my_input.ctypes.data)
 _my_output = _imgsample.ffi.cast('float *', my_output.ctypes.data)
 
 _imgsample.lib.sample2d(_x, _y, _window_size, _my_input, _my_output)
-assert numpy.array_equal(my_output[0], [[1,2,3],[5,6,7],[9,10,11]]), str(my_output[0])
-assert numpy.array_equal(my_output[sample_count-1], [[6,7,8],[10,11,12],[14,15,16]])
 
 # window size 2
 # RGB array (3D)
