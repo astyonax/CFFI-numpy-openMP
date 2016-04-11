@@ -4,7 +4,13 @@ cffi, numpy, and openMP.
 # Running (release mode)
 
 ```
-OMP_NUM_THREADS=2 python3 -O test.py use_openmp
+$ OMP_NUM_THREADS=2 python3 -O test.py use_openmp
+Building for performance with OpenMP...
+Test 1 OK!
+Test 2 OK! -- 5120x5120
+numpy time -> 0.1006176 s/call
+C time -> 0.0816459 s/call
+C extension is 18.8552499761% faster
 ```
 
 # Running (debug mode)
