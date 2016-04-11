@@ -5,10 +5,6 @@
 #include "stdio.h" // import printf
 #include "stdlib.h" // import size_t
 
-double myadder(double x, double y) {
-    return x + y;
-}
-
 void add_array( const size_t row_count, const size_t column_count, CDTYPE *a, CDTYPE *b, CDTYPE *result) {
 
     size_t idx;
