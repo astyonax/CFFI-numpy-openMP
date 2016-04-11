@@ -1,34 +1,19 @@
-#ifdef USE_OPENMP
+#ifdef use_openmp
     #include "omp.h"
 #endif
 
 #include "stdio.h" // import printf
 #include "stdlib.h" // import size_t
 
-float myadder(float x, float y) {
+double myadder(double x, double y) {
     return x + y;
 }
 
-void add_array_f(size_t row_count, size_t column_count, float *a, float *b, float *result) {
-    size_t idx, i, j;
+void add_array( const size_t row_count, const size_t column_count, CDTYPE *a, CDTYPE *b, CDTYPE *result) {
 
-    #ifdef USE_OPENMP
-        #pragma omp parallel for private(j) collapse(2)
-    #endif
-    for(i = 0; i < row_count; i++) {
-        for(j = 0; j < column_count; j++) {
-            idx = column_count * i + j;
-            result[idx] = a[idx] + b[idx];
-        }
-    }
-}
-
-void add_array_i(size_t row_count, size_t column_count, int *a, int *b, int *result) {
     size_t idx;
-
-    // collapse(2) needed to parallelize both loops
     #ifdef use_openmp
-        #pragma omp parallel for collapse(2)
+        #pragma omp for collapse(2) private(idx) // This is openmp 3.0
     #endif
     for(size_t i = 0; i < row_count; i++) {
         for(size_t j = 0; j < column_count; j++) {
@@ -37,4 +22,3 @@ void add_array_i(size_t row_count, size_t column_count, int *a, int *b, int *res
         }
     }
 }
-
